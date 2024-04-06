@@ -34,19 +34,20 @@ export default function DynamicForm() {
   
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-      <textarea
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          placeholder="Enter text"
-          rows="20" // Sets the minimum number of lines the textarea will display
-          className="w-full max-w-lg" // Adjust width as necessary; using Tailwind CSS classes for example
-          style={{ resize: 'vertical' }} // Allows vertical resizing, you can also use 'none' to disable resizing
-        ></textarea>
         <br/>
-        <button type="submit" className="border border-gray-300 bg-white text-black py-2 px-4 rounded hover:border-gray-500 hover:bg-gray-100">V + 7</button>
-      </form>
-      {outputText && <div><br/><br/> <p>{outputText}</p></div>}
+        <form onSubmit={handleSubmit}>
+        <textarea
+            value={inputText}
+            onChange={(e) => setInputText(e.target.value)}
+            placeholder="Enter poem"
+            rows="20" // Sets the minimum number of lines the textarea will display
+            className="w-full max-w-lg" // Adjust width as necessary; using Tailwind CSS classes for example
+            style={{ resize: 'vertical' }} // Allows vertical resizing, you can also use 'none' to disable resizing
+            ></textarea>
+            <br/>
+            <button type="submit" className="border border-gray-300 bg-white text-black py-2 px-4 rounded hover:border-gray-500 hover:bg-gray-100">V + 7</button>
+        </form>
+        {outputText && <div><br/><br/> <p>{outputText}</p></div>}
     </div>
   );
 }

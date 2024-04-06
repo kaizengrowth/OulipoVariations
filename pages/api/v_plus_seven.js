@@ -1,28 +1,33 @@
-// Import the necessary module
-import { exec } from 'child_process';
+// pages/api/v_plus_seven.js
 
-export default function handler(req, res) {
-  if (req.method === 'POST') {
-    const { text } = req.body;
+export default async function handler(req, res) {
+  // Only allow POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
 
-    const scriptPath = './scripts/v_plus_seven.py';
-
-    // Execute the Python script using the input text
-    exec(`python3 ${scriptPath} "${text}"`, (error, stdout, stderr) => {
-      console.log("Error:", error);
-      console.log("STDOUT:", stdout);
-      console.log("STDERR:", stderr);
-      
-      if (error) {
-        console.error(`exec error: ${error}`);
-        return res.status(500).json({ error: 'Error executing Python script' });
-      }
-      // Send the stdout (output of the Python script) as the response
-      res.status(200).json({ transformed: stdout });
+  try {
+    // Forward the request to the AWS Lambda function
+    const lambdaResponse = await fetch('https://xmp8gz03sg.execute-api.us-east-1.amazonaws.com/prod/v_plus_seven', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(req.body),
     });
-  } else {
-    // Handle any non-POST requests
-    res.setHeader('Allow', ['POST']);
-    res.status(405).end(`Method ${req.method} Not Allowed`);
+
+    // If the request to Lambda failed
+    if (!lambdaResponse.ok) {
+      throw new Error('Failed to transform text');
+    }
+
+    // Parse the response from Lambda
+    const data = await lambdaResponse.json();
+
+    // Respond to the client with the transformed text
+    res.status(200).json(data);
+  } catch (error) {
+    // Catch any errors and respond with an error message
+    res.status(500).json({ message: error.message });
   }
 }
