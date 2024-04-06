@@ -23,7 +23,7 @@ export default function DynamicForm() {
             }
 
             const data = await response.json();
-            setOutputText(data.transformed);
+            setOutputText(data.transformedText);
         } catch (error) {
             console.error(error);
             // Handle error (show error message to user, etc.)

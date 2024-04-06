@@ -1,6 +1,9 @@
 // pages/api/v_plus_seven.js
 
 export default async function handler(req, res) {
+  console.log('triggering api function');
+
+
   // Only allow POST requests
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -23,6 +26,7 @@ export default async function handler(req, res) {
 
     // Parse the response from Lambda
     const data = await lambdaResponse.json();
+    console.log(data);
 
     // Respond to the client with the transformed text
     res.status(200).json(data);
